@@ -9,8 +9,6 @@ exports.handler = function(context, event, callback) {
   const ClientCapability = Twilio.jwt.ClientCapability;
   const clientName = event.clientName;
   const token = event.token;
-  console.log(token);
-  console.log(clientName);
   jwt.verify(token, context.AUTH_TOKEN, function(err, decoded) {
     if (err) {
       response.appendHeader('status', '401')
