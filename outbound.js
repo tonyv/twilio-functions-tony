@@ -1,19 +1,30 @@
 exports.handler = function(context, event, callback) {
+  let response = new Twilio.Response()
+  let jwt = require('jsonwebtoken');
 
-  const from = req.body.From
-  const to = req.body.To
-  const agent = req.body.Agent
-  const client = context.getTwilioClient();
+  const from = event.From
+  const to = event.To
+  const agent = event.Agent
+  const token = event.Token
+  const client = context.getTwilioClient()
 
-  client.taskrouter.v1
-    .workspaces(config.workspaceSid)
-    .tasks
-    .create({
-      workflowSid: config.workflowSid,
-      taskChannel: 'custom1',
-      attributes: JSON.stringify({direction:"outbound", agent_name: 'bcoyle', from: from, to: to}),
-    }).then((task) => {
-      console.log(task)
-    })
-    res.send({});
+  jwt.verify(token, context.AUTH_TOKEN, function(err, decoded) {
+    if (err) {
+      response.appendHeader('Status', 401)
+      callback(null, response)
+    } else {
+      response.appendHeader('Status', 200)
+      client.taskrouter.v1
+        .workspaces(context.TWILIO_WORKSPACE_SID)
+        .tasks
+        .create({
+          workflowSid: context.TWILIO_WORKFLOW_SID,
+          taskChannel: 'custom1',
+          attributes: JSON.stringify({direction:"outbound", agent_name: 'tony', from: from, to: to}),
+        }).then((task) => {
+          //console.log(task)
+          callback(null, response)
+        })
+    }
+  })
 };

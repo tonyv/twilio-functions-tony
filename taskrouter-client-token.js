@@ -1,5 +1,14 @@
 exports.handler = function(context, event, callback) {
-  const worker = 'WKa11a52ccad4388a1b34a4952239c3214';
+  let jwt = require('jsonwebtoken');
+
+  const response = new Twilio.Response();
+  response.appendHeader('Access-Control-Allow-Origin', '*');
+  response.appendHeader('Access-Control-Allow-Methods', 'POST');
+  response.appendHeader('Content-Type', 'application/json');
+  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+
+  const worker = event.workerSid;
   const taskrouter = Twilio.jwt.taskrouter;
   const util = Twilio.jwt.taskrouter.util;
   const TaskRouterCapability = taskrouter.TaskRouterCapability;
@@ -37,7 +46,11 @@ exports.handler = function(context, event, callback) {
     capability.addPolicy(policy);
   });
 
-  callback(null, capability.toJwt());
+  response.setBody({token: capability.toJwt()});
+
+  console.log(response.body);
+
+  callback(null, response);
 }
 
 
@@ -52,7 +65,7 @@ function buildWorkspacePolicy(options, context) {
   var version = 'v1';
   var resources = options.resources || [];
 
-  const TASKROUTER_BASE_URL = 'https://' + context.DOMAIN_NAME;
+  const TASKROUTER_BASE_URL = 'https://' + 'taskrouter.twilio.com';
 
   var urlComponents = [TASKROUTER_BASE_URL, version, 'Workspaces', context.TWILIO_WORKSPACE_SID]
 
