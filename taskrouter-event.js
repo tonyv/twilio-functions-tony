@@ -2,14 +2,13 @@ exports.handler = function(context, event, callback) {
   console.log('*********************************************************')
   console.log('*********************************************************')
   console.log('*************** TASKROUTER EVENT ************************')
-  console.log(`${req.body.EventType} --- ${req.body.EventDescription}`)
-  console.log(req.body)
+  console.log(`${event.EventType} --- ${event.EventDescription}`)
 
   const client = context.getTwilioClient();
   const service = client.sync.services(context.TWILIO_SYNC_SERVICE_SID);
 
-  if (req.body.ResourceType == 'worker') {
-    const worker = req.body
+  if (event.ResourceType == 'worker') {
+    const worker = event;
 
     service.syncMaps('current_workers')
       .syncMapItems(worker.WorkerSid).update({
@@ -23,7 +22,7 @@ exports.handler = function(context, event, callback) {
       }).catch(function(error) {
         console.log(error);
       });
-  } else if (req.body.ResourceType == 'task') {
+  } else if (event.ResourceType == 'task') {
     const task = req.body
 
     if(task.EventType == 'task.created') {
