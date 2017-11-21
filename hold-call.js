@@ -12,7 +12,7 @@ exports.handler = function(context, event, callback) {
       response.appendHeader('Status', 401)
       callback(null, response)
     } else {
-      client.api.accounts(context.accountSid)
+      client.api.accounts(context.ACCOUNT_SID)
         .conferences(confSid)
         .participants(callSid)
         .update({hold: toggle})
