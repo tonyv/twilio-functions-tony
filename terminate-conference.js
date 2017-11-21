@@ -21,8 +21,10 @@ exports.handler = function(context, event, callback) {
         .then((conference) => {
           if (conference) {
             conference.update({status: "completed"})
-            .then((conference) => response.setBody({result: conference.status});)
-          }
+            .then((conference) => {
+              response.setBody({result: conference.status})
+              callback(null, response)
+            })
         })
         .catch((error) => {
           console.log(error)
