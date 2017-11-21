@@ -1,6 +1,6 @@
 exports.handler = function(context, event, callback) {
-  var taskAttributes = JSON.parse(event.body.TaskAttributes);
-  var workerAttributes = JSON.parse(event.body.WorkerAttributes);
+  var taskAttributes = event.TaskAttributes;
+  var workerAttributes = event.WorkerAttributes;
   var instructions = {}
 
     if (workerAttributes.skills) {
