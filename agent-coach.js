@@ -15,6 +15,7 @@ exports.handler = function(context, event, callback) {
       dial.conference({
         beep: false,
         startConferenceOnEnter: false,
+        endConferenceOnExit: false,
         coach: callSid
       }, conferenceSid);
       callback(null, resp)
