@@ -12,6 +12,9 @@ exports.handler = function(context, event, callback) {
       response.appendHeader('Status', 401)
       callback(null, response)
     } else {
+      const resp = new Twilio.VoiceResponse();
+      const dial = resp.dial();
+      
       dial.conference({
         beep: false,
         startConferenceOnEnter: false,
