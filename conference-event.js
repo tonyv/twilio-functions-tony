@@ -1,8 +1,6 @@
 exports.handler = function(context, event, callback) {
   let response = new Twilio.Response()
 
-  console.log('*********************************************************')
-  console.log('*********************************************************')
   console.log('*************** CONFERENCE EVENT ************************')
   console.log(event.body)
   const client = context.getTwilioClient();
