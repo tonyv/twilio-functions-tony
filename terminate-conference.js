@@ -29,7 +29,7 @@ exports.handler = function(context, event, callback) {
         })
         .catch((error) => {
           console.log(error)
-          callback(null, {});
+          callback(null, response);
         })
     }
   })

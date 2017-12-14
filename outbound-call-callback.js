@@ -2,6 +2,11 @@ exports.handler = function(context, event, callback) {
   let jwt = require('jsonwebtoken')
   let response = new Twilio.Response()
 
+  response.appendHeader('Access-Control-Allow-Origin', '*');
+  response.appendHeader('Access-Control-Allow-Methods', 'POST');
+  response.appendHeader('Content-Type', 'application/json');
+  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   const to = event.to
   const from = event.from
   const conferenceSid = event.sid
@@ -17,15 +22,15 @@ exports.handler = function(context, event, callback) {
         .conferences(conferenceSid)
         .participants.create({to: to, from: from, earlyMedia: "true"})
         .then((participant) => {
-          const resp = new Twilio.VoiceResponse();
-          const dial = resp.dial();
+          const voice_response = new Twilio.VoiceResponse();
+
+          const dial = voice_response.dial();
           dial.conference({
             beep: false,
             waitUrl: '',
             startConferenceOnEnter: true,
             endConferenceOnExit: false
           }, conferenceSid);
-          callback(null, resp)
 
           // Now update the task with a conference attribute with Agent Call Sid
           client.taskrouter.v1
@@ -36,7 +41,8 @@ exports.handler = function(context, event, callback) {
             }).then((task) => {
               console.log(task)
             })
-            callback(null, {});
+
+          callback(null, voice_response)
         })
         .catch((error) => {
           console.log(error)

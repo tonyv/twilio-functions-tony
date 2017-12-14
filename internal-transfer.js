@@ -1,6 +1,11 @@
 exports.handler = function(context, event, callback) {
   let jwt = require('jsonwebtoken')
-  let response = new Twilio.Response()
+
+  const response = new Twilio.Response();
+  response.appendHeader('Access-Control-Allow-Origin', '*');
+  response.appendHeader('Access-Control-Allow-Methods', 'POST');
+  response.appendHeader('Content-Type', 'application/json');
+  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   const conferenceSid = event.sid
   const token = event.token
@@ -28,7 +33,8 @@ exports.handler = function(context, event, callback) {
                          taskChannelUniqueName: task.taskChannelUniqueName,
                          priority: task.priority };
 
-          res.send(body);
+          response.setBody(body)
+          callback(null, response)
         });
     }
   })

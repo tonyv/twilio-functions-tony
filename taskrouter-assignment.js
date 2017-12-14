@@ -11,5 +11,6 @@ exports.handler = function(context, event, callback) {
     }
   }
 
-  callback(null, instructions);
+  response.setBody(instructions)
+  callback(null, response);
 };

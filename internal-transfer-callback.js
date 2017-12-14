@@ -2,6 +2,11 @@ exports.handler = function(context, event, callback) {
   let jwt = require('jsonwebtoken')
   let response = new Twilio.Response()
 
+  response.appendHeader('Access-Control-Allow-Origin', '*');
+  response.appendHeader('Access-Control-Allow-Methods', 'POST');
+  response.appendHeader('Content-Type', 'application/json');
+  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   const conferenceSid = event.conferenceSid
   const token = event.token
   const client = context.getTwilioClient();
@@ -20,5 +25,7 @@ exports.handler = function(context, event, callback) {
         startConferenceOnEnter: true,
         endConferenceOnExit: false
       }, conferenceSid);
+
+      callback(null, response)
   })
 };

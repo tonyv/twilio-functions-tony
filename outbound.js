@@ -2,6 +2,11 @@ exports.handler = function(context, event, callback) {
   let response = new Twilio.Response()
   let jwt = require('jsonwebtoken');
 
+  response.appendHeader('Access-Control-Allow-Origin', '*');
+  response.appendHeader('Access-Control-Allow-Methods', 'POST');
+  response.appendHeader('Content-Type', 'application/json');
+  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+
   const from = event.From
   const to = event.To
   const agent = event.Agent
