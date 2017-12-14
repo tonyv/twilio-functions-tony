@@ -3,7 +3,7 @@ exports.handler = function(context, event, callback) {
   let jwt = require('jsonwebtoken');
 
   response.appendHeader('Access-Control-Allow-Origin', '*');
-  response.appendHeader('Access-Control-Allow-Methods', 'POST');
+  response.appendHeader('Access-Control-Allow-Methods', 'OPTIONS POST');
   response.appendHeader('Content-Type', 'application/json');
   response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -15,21 +15,23 @@ exports.handler = function(context, event, callback) {
 
   jwt.verify(token, context.AUTH_TOKEN, function(err, decoded) {
     if (err) {
-      response.appendHeader('Status', 401)
-      callback(null, response)
+     console.log('token: '+token);
+     response.appendHeader('Status', 401)
+     callback(null, response)
     } else {
-      response.appendHeader('Status', 200)
-      client.taskrouter.v1
-        .workspaces(context.TWILIO_WORKSPACE_SID)
-        .tasks
-        .create({
-          workflowSid: context.TWILIO_WORKFLOW_SID,
-          taskChannel: 'custom1',
-          attributes: JSON.stringify({direction:"outbound", agent_name: 'tony', from: from, to: to}),
-        }).then((task) => {
-          //console.log(task)
-          callback(null, response)
-        })
+     response.appendHeader('Status', 200)
+     client.taskrouter.v1
+       .workspaces(context.TWILIO_WORKSPACE_SID)
+       .tasks
+       .create({
+         workflowSid: context.TWILIO_WORKFLOW_SID,
+         taskChannel: 'custom1',
+         attributes: JSON.stringify({direction:"outbound", agent_id: agent, from: from, to: to}),
+       }).then((task) => {
+         console.log(task)
+         response.setBody({sid:task.sid});
+         callback(null, response)
+       })
     }
   })
 };
