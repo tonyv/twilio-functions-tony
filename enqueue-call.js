@@ -1,3 +1,5 @@
+// This function should Check for valid Twilio signature
+
 exports.handler = function(context, event, callback) {
   const resp = new Twilio.twiml.VoiceResponse();
   const attributes = {skill: 'customer_care', type: 'inbound' };

@@ -22,10 +22,14 @@ exports.handler = function(context, event, callback) {
         .conferences(confSid)
         .participants(callSid)
         .update({hold: toggle})
-        .then((participant) => console.log(participant.hold))
-        .done();
-
-      callback(null, response);
+      	.then((participant) => {
+        	response.setBody({result: participant.hold})
+            callback(null, response)
+         })
+        .catch((error) => {
+          response.setBody({result: "error", message: error.message})
+          callback(null, response);
+        })
     }
   })
 };
