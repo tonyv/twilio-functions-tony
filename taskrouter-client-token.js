@@ -18,7 +18,7 @@ exports.handler = function(context, event, callback) {
     authToken: context.AUTH_TOKEN,
     workspaceSid: context.TWILIO_WORKSPACE_SID,
     channelId: worker,
-    ttl: 2880});
+    ttl: 3600});
 
   // Event Bridge Policies
   var eventBridgePolicies = util.defaultEventBridgePolicies(context.ACCOUNT_SID, worker);
