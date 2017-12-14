@@ -26,6 +26,6 @@ exports.handler = function(context, event, callback) {
         endConferenceOnExit: false
       }, conferenceSid);
 
-      callback(null, response)
+      callback(null, resp)
   })
 };
