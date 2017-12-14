@@ -21,7 +21,7 @@ exports.handler = function(context, event, callback) {
             console.log("successfully closed conference"))
             response.setBody({result: "success", message: "successfully closed conference"})
             callback(null, response)
-          }
+          })
         }
       })
       .catch((error) => {
