@@ -18,7 +18,7 @@ exports.handler = function(context, event, callback) {
     authToken: context.AUTH_TOKEN,
     workspaceSid: context.TWILIO_WORKSPACE_SID,
     channelId: worker,
-    ttl: 3600});
+    ttl: 2880});
 
   // Event Bridge Policies
   var eventBridgePolicies = util.defaultEventBridgePolicies(context.ACCOUNT_SID, worker);
@@ -30,14 +30,17 @@ exports.handler = function(context, event, callback) {
     buildWorkspacePolicy({ resources: ['Activities'], method: 'POST' }, context),
     buildWorkspacePolicy({ resources: ['Activities'], method: 'GET' }, context),
     //
+
     buildWorkspacePolicy({ resources: ['Tasks', '**'], method: 'POST'  }, context),
     buildWorkspacePolicy({ resources: ['Tasks', '**'], method: 'GET' }, context),
     // Workspace Activities Worker Reserations Policy
     buildWorkspacePolicy({ resources: ['Workers', worker, 'Reservations', '**'], method: 'POST' }, context),
     buildWorkspacePolicy({ resources: ['Workers', worker, 'Reservations', '**'], method: 'GET' }, context),
-    //
+    // Worker Channels
+    buildWorkspacePolicy({ resources: ['Workers', worker, 'Channels', '**'], method: 'POST' }, context),
+    buildWorkspacePolicy({ resources: ['Workers', worker, 'Channels', '**'], method: 'GET' }, context),
 
-    // Workspace Activities Worker  Policy
+    // Worker  Policy
     buildWorkspacePolicy({ resources: ['Workers', worker], method: 'GET' }, context),
     buildWorkspacePolicy({ resources: ['Workers', worker], method: 'POST' }, context),
   ];
