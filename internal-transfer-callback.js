@@ -27,5 +27,6 @@ exports.handler = function(context, event, callback) {
       }, conferenceSid);
 
       callback(null, resp)
-  })
-};
+    }
+  });
+}
