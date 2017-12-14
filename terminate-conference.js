@@ -25,6 +25,7 @@ exports.handler = function(context, event, callback) {
               response.setBody({result: conference.status})
               callback(null, response)
             })
+          }
         })
         .catch((error) => {
           console.log(error)
