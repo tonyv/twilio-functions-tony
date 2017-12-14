@@ -21,7 +21,7 @@ exports.handler = function(context, event, callback) {
           taskChannel: 'voice',
           attributes: JSON.stringify({ type: "transfer",
                                        agent_id: agent_id,
-                                       confName: req.body.confName}),
+                                       confName: conferenceSid }),
         }).then((task) => {
           const body = { workflowFriendlyName: task.workflowFriendlyName,
                          assignmentStatus: task.assignmentStatus,
