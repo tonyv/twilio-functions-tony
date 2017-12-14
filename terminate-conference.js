@@ -19,7 +19,6 @@ exports.handler = function(context, event, callback) {
         .conferences(confSid)
         .fetch()
         .then((conference) => {
-          console.log(conference.status)
           if (conference.status === "in-progress") {
             conference.update({status: "completed"})
             .then((conference) => {
