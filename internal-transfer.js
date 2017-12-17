@@ -7,7 +7,7 @@ exports.handler = function(context, event, callback) {
   response.appendHeader('Content-Type', 'application/json');
   response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  const conferenceSid = event.sid
+  const conferenceSid = event.conferenceSid
   const token = event.token
   const client = context.getTwilioClient();
   const agent_id = event.agent_id
@@ -23,19 +23,16 @@ exports.handler = function(context, event, callback) {
         .tasks
         .create({
           workflowSid: context.TWILIO_WORKFLOW_SID,
-          taskChannel: 'voice',
+          taskChannel: "voice",
           attributes: JSON.stringify({ type: "transfer",
                                        agent_id: agent_id,
                                        confName: conferenceSid }),
         }).then((task) => {
-          const body = { workflowFriendlyName: task.workflowFriendlyName,
-                         assignmentStatus: task.assignmentStatus,
-                         taskChannelUniqueName: task.taskChannelUniqueName,
-                         priority: task.priority };
+          const body = { taskSid: task.sid };
 
           response.setBody(body)
           callback(null, response)
         });
     }
   })
-};
+}
