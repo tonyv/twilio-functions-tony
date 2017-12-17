@@ -19,17 +19,20 @@ exports.handler = function(context, event, callback) {
         .conferences(confSid)
         .fetch()
         .then((conference) => {
-          if (conference) {
+          if (conference.status === "in-progress") {
             conference.update({status: "completed"})
             .then((conference) => {
               response.setBody({result: conference.status})
               callback(null, response)
             })
+          } else {
+          	response.setBody({result: "completed"})
+            callback(null, response)
           }
         })
         .catch((error) => {
           console.log(error)
-          callback(null, response);
+          callback(null, {});
         })
     }
   })
