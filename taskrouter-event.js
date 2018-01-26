@@ -1,28 +1,26 @@
 exports.handler = function(context, event, callback) {
-  console.log('*********************************************************')
-  console.log('*********************************************************')
-  console.log('*************** TASKROUTER EVENT ************************')
-  console.log(`${event.EventType} --- ${event.EventDescription}`)
+  // console.log('*********************************************************')
+  // console.log('*********************************************************')
+  // console.log('*************** TASKROUTER EVENT ************************')
+  // console.log(`${event.EventType} --- ${event.EventDescription}`)
 
   const client = context.getTwilioClient();
   const service = client.sync.services(context.TWILIO_SYNC_SERVICE_SID);
-  const task_removal_events = ['task.completed', 'task.canceled', 'task.deleted', 'task.timeout']
-  const task_status_events = ['task.updated', 'task.wrapup']
+
+  const task_removal_events = ['task.completed', 'task.canceled', 'task.deleted', 'task.timeout', 'task.wrapup']
 
   if (event.ResourceType == 'worker') {
     const worker = event;
-
     service.syncMaps('current_workers')
       .syncMapItems(worker.WorkerSid).update({
         data: {
-          name: worker.Workername,
-          activity: worker.WorkerActivityName,
-          timestamp: worker.Timestamp
+          name: worker.WorkerName,
+          activity: worker.WorkerActivityName
         }
-      }).then(function(response) {
-        console.log("worker updated");
+      }).then(function(res) {
+        callback(null, {})
       }).catch(function(error) {
-        console.log(error);
+        callback(error)
       });
   } else if (event.ResourceType == 'task') {
     const task = req.body
@@ -34,33 +32,34 @@ exports.handler = function(context, event, callback) {
           data: {
             status: task.TaskAssignmentStatus
           }
-        }).then(function(response) {
-          console.log("task created");
+        }).then(function(res) {
+          callback(null, {})
         }).catch(function(error) {
           console.log(error)
+          callback(error)
         });
-    } else if(task_status_events.includes(task.EventType)) {
+    } else if(task.EventType == 'task.updated') {
         service.syncMaps('current_tasks')
           .syncMapItems(task.TaskSid).update({
             data: {
               status: task.TaskAssignmentStatus
             }
-          }).then(function(response) {
-            console.log("task updated");
+          }).then(function(res) {
+            callback(null, {})
           }).catch(function(error) {
             console.log(error);
+            callback(error)
           });
     } else if(task_removal_events.includes(task.EventType)) {
         service.syncMaps('current_tasks')
           .syncMapItems(task.TaskSid)
           .remove()
-          .then(function(response) {
-            console.log(task.EventType + ' event received => task removed');
+          .then(function(res) {
+            callback(null, {})
           }).catch(function(error) {
             console.log(error);
+            callback(error)
           });
     }
   }
-
-  callback(null, {})
 };
