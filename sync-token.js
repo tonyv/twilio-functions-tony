@@ -7,12 +7,12 @@ exports.handler = function(context, event, callback) {
   response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 
   const ACCOUNT_SID = context.ACCOUNT_SID;
-  const SERVICE_SID = context.SYNC_SERVICE_SID;
+  const SERVICE_SID = context.TWILIO_SYNC_SERVICE_SID;
   const API_KEY = context.TWILIO_API_KEY;
   const API_SECRET = context.TWILIO_API_SECRET;
 
   // REMINDER: This identity is only for prototyping purposes
-  const IDENTITY = 'only for testing';
+  const IDENTITY = event.clientName;
 
   const AccessToken = Twilio.jwt.AccessToken;
   const SyncGrant = AccessToken.SyncGrant;
@@ -32,5 +32,6 @@ exports.handler = function(context, event, callback) {
 
   const body = { token: accessToken.toJwt() }
   response.setBody(body)
+  console.log(body)
   callback(null, response);
 }

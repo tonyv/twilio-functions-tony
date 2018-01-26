@@ -5,18 +5,8 @@ exports.handler = function(context, event, callback) {
   response.appendHeader('Content-Type', 'application/json');
   response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-
   const client = context.getTwilioClient();
   const service = client.sync.services(context.TWILIO_SYNC_SERVICE_SID);
-
-  service.syncMaps
-    .list()
-    .then(response => {
-      console.log("LIST OF MAPS =>", response);
-    })
-    .catch(error => {
-      console.log(error);
-    });
 
   service.syncMaps
     .create({
