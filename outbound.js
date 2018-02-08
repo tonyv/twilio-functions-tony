@@ -15,7 +15,6 @@ exports.handler = function(context, event, callback) {
 
   jwt.verify(token, context.AUTH_TOKEN, function(err, decoded) {
     if (err) {
-     console.log('token: '+token);
      response.appendHeader('Status', 401)
      callback(null, response)
     } else {
