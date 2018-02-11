@@ -19,9 +19,6 @@ exports.handler = function(context, event, callback) {
           authToken: context.AUTH_TOKEN,
       });
       capability.addScope(new ClientCapability.IncomingClientScope(clientName));
-      capability.addScope(
-        new ClientCapability.OutgoingClientScope({applicationSid: context.TWILIO_TWIML_APP})
-      );
       response.setBody({token: capability.toJwt()});
       callback(null, response);
     }
