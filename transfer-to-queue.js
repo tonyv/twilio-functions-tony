@@ -24,10 +24,7 @@ exports.handler = function(context, event, callback) {
         .create({
           workflowSid: context.TWILIO_WORKFLOW_SID,
           taskChannel: "voice",
-          attributes: JSON.stringify({ conversations: {
-                                        conversation_id: conferenceSid,
-                                        department: department
-                                      },
+          attributes: JSON.stringify( type: 'transfer',
                                       department: department,
                                       confName: conferenceSid }),
         }).then((task) => {

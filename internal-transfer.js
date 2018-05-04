@@ -7,6 +7,10 @@ exports.handler = function(context, event, callback) {
   response.appendHeader('Content-Type', 'application/json');
   response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
 
+  let conference = {}
+  conference.participants = JSON.parse(event.participants)
+  console.log(conference.participants)
+
   const conferenceSid = event.conferenceSid
   const token = event.token
   const client = context.getTwilioClient();
@@ -26,6 +30,7 @@ exports.handler = function(context, event, callback) {
           taskChannel: "voice",
           attributes: JSON.stringify({ type: "transfer",
                                        agent_id: agent_id,
+                                       conference: conference,
                                        confName: conferenceSid }),
         }).then((task) => {
           const body = { taskSid: task.sid };
