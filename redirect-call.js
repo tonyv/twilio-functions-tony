@@ -6,18 +6,18 @@ exports.handler = function(context, event, callback) {
   response.appendHeader('Access-Control-Allow-Origin', '*');
   response.appendHeader('Access-Control-Allow-Methods', '*');
   response.appendHeader('Content-Type', '*');
-  response.appendHeader('Access-Control-Allow-Headers', 'Content-Type');
+  response.appendHeader('Access-Control-Allow-Headers', '*');
 
-  const callSid = event.callSid
-  const taskSid = event.taskSid
+  const callSid = event.call_sid
+  const conferenceSid = event.conferenceSid
   const client = context.getTwilioClient();
 
     client.calls(callSid)
-      .update({method: 'POST', url: 'https://white-leopard-4088.twil.io/conference?taskSid=' + taskSid})
+      .update({method: 'POST', url: 'https://absurd-pizzas-9864.twil.io/conference?conferenceSid=' + conferenceSid})
       .then((call) => {
-        //response.setBody({})
         callback(null, response)
       })
       .done();
 
+    callback(null, response)
 }
